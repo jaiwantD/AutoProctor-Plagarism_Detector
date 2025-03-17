@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamGuard - Secure Online Exam Monitoring</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #3a5fe5;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Containers */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background: #3a5fe5;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+    </style>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">ExamGuard</a>
+            <div class="nav-links">
+                <a href="#" id="nav-home">Home</a>
+                <a href="#" id="nav-login">Login</a>
+                <a href="#" id="nav-exam" class="hidden">Exam</a>
+                <a href="#" id="nav-logout" class="hidden">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-container" class="container">
+        <h1>Welcome to ExamGuard</h1>
+        <p>Secure online exam monitoring using AI and real-time proctoring.</p>
+        <button id="go-to-login" class="btn btn-primary">Login / Sign Up</button>
+    </div>
+
+    <!-- Login/Signup Page -->
+    <div id="auth-container" class="container hidden">
+        <h2>User Authentication</h2>
+        <form id="auth-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+
+    <!-- Webcam Verification Page -->
+    <div id="webcam-container" class="container hidden">
+        <h2>Webcam Verification</h2>
+        <p>Please enable your webcam for identity verification.</p>
+        <div id="webcam-view"></div>
+        <button id="start-webcam" class="btn btn-primary">Enable Webcam</button>
+        <div id="face-status"></div>
+        <button id="proceed-to-exam" class="btn btn-primary hidden">Proceed to Exam</button>
+    </div>
+
+    <!-- Exam Page -->
+    <div id="exam-container" class="container hidden">
+        <h2>Online Proctored Exam</h2>
+        <p><strong>Time Remaining:</strong> <span id="exam-timer">60:00</span></p>
+        <div id="question-container">
+            <p>Question 1: What is 2 + 2?</p>
+            <ul>
+                <li><input type="radio" name="q1"> 3</li>
+                <li><input type="radio" name="q1"> 4</li>
+                <li><input type="radio" name="q1"> 5</li>
+            </ul>
+        </div>
+        <button id="submit-exam" class="btn btn-danger">Submit Exam</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ExamGuard. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

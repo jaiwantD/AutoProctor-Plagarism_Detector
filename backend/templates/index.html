@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Registration</title>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+h1 {
+    color: #1a3a5f;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    border-bottom: 3px solid #2196F3;
+    padding-bottom: 10px;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e0e0e0;
+}
+
+.instructions {
+    background-color: #f0f7ff;
+    border-left: 5px solid #2196F3;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.instructions h3 {
+    color: #1a3a5f;
+    margin-top: 0;
+    font-size: 1.3rem;
+}
+
+.instructions ol {
+    padding-left: 25px;
+}
+
+.instructions li {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.buttons {
+    text-align: center;
+    margin: 25px 0;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+#resetBtn {
+    background-color: #f44336;
+}
+
+#startExamBtn {
+    background-color: #2196F3;
+    display: none;
+}
+
+#startExamBtn:hover {
+    background-color: #0b7dda;
+}
+
+#output {
+    background-color: #1e1e1e;
+    color: #00ff00;
+    padding: 15px;
+    border-radius: 8px;
+    height: 250px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    margin-top: 20px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+.success {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.error {
+    color: #f44336;
+    font-weight: bold;
+}
+
+.progress {
+    height: 12px;
+    background-color: #e0e0e0;
+    border-radius: 6px;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.3s;
+    position: absolute;
+}
+
+.progress-indeterminate {
+    background: linear-gradient(to right, #e0e0e0 30%, #4CAF50 50%, #e0e0e0 70%);
+    background-size: 200% 100%;
+    animation: progress-animation 1.5s infinite;
+    height: 100%;
+    width: 100%;
+}
+
+@keyframes progress-animation {
+    0% {
+        background-position: 120% 50%;
+    }
+    100% {
+        background-position: -20% 50%;
+    }
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.status-idle {
+    background-color: #e0e0e0;
+    color: #333;
+    border: 1px solid #cccccc;
+}
+
+.status-running {
+    background-color: #2196F3;
+    color: white;
+    border: 1px solid #0b7dda;
+}
+
+.status-success {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #3d8b40;
+}
+
+.status-error {
+    background-color: #f44336;
+    color: white;
+    border: 1px solid #d32f2f;
+}
+
+#statusContainer {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Additional security-focused styling */
+.container::before {
+    content: "🔒";
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    opacity: 0.7;
+}
+
+.container {
+    position: relative;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .instructions {
+        padding: 15px;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Face Recognition Registration</h1>
+    
+    <div class="container">
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Make sure your camera is connected and working</li>
+                <li>Position yourself in front of the camera</li>
+                <li>Click the "Start Registration" button</li>
+                <li>The system will capture 20 images of your face</li>
+                <li>Look at different angles for better recognition accuracy</li>
+                <li>Press ESC during capture if you need to stop early</li>
+            </ol>
+        </div>
+        
+        <div id="statusContainer">
+            <span id="statusBadge" class="status-badge status-idle">Ready</span>
+        </div>
+        
+        <div id="progressContainer" style="display: none;">
+            <div class="progress">
+                <div class="progress-indeterminate"></div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="startBtn">Start Registration</button>
+            <button id="resetBtn" style="display: none;">Reset</button>
+            <button id="startExamBtn" style="display: none;">Start Exam</button>
+        </div>
+        
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const startExamBtn = document.getElementById('startExamBtn');
+        const output = document.getElementById('output');
+        const progressContainer = document.getElementById('progressContainer');
+        const statusBadge = document.getElementById('statusBadge');
+        
+        let statusCheckInterval;
+        let lastMessageCount = 0;
+        
+        // Start registration process
+        startBtn.addEventListener('click', function() {
+            startRegistration();
+        });
+        
+        // Reset button event
+        resetBtn.addEventListener('click', function() {
+            resetProcess();
+        });
+        
+        // Start exam button event
+        startExamBtn.addEventListener('click', function() {
+            window.location.href = 'exam.html';
+        });
+        
+        function startRegistration() {
+            // Reset output
+            output.innerHTML = '';
+            lastMessageCount = 0;
+            
+            // Update UI
+            startBtn.disabled = true;
+            startExamBtn.style.display = 'none';
+            progressContainer.style.display = 'block';
+            statusBadge.className = 'status-badge status-running';
+            statusBadge.textContent = 'Running...';
+            
+            // Send request to start registration
+            fetch('/register', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'started') {
+                    // Start checking status
+                    statusCheckInterval = setInterval(checkStatus, 1000);
+                } else {
+                    // Show error
+                    appendToOutput('Error: ' + data.message, true);
+                    updateUIOnComplete(false);
+                }
+            })
+            .catch(error => {
+                appendToOutput('Error: ' + error.message, true);
+                updateUIOnComplete(false);
+            });
+        }
+        
+        function checkStatus() {
+            fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                // Add new messages to output
+                if (data.messages.length > 0) {
+                    data.messages.forEach(message => {
+                        appendToOutput(message);
+                    });
+                }
+                
+                // Check if process is completed
+                if (data.completed) {
+                    clearInterval(statusCheckInterval);
+                    updateUIOnComplete(data.success);
+                    
+                    // Add final message if any
+                    if (data.final_message) {
+                        appendToOutput(data.final_message, !data.success);
+                    }
+                }
+            })
+            .catch(error => {
+                appendToOutput('Error checking status: ' + error.message, true);
+            });
+        }
+        
+        function updateUIOnComplete(success) {
+            startBtn.disabled = false;
+            resetBtn.style.display = 'inline-block';
+            progressContainer.style.display = 'none';
+            
+            if (success) {
+                statusBadge.className = 'status-badge status-success';
+                statusBadge.textContent = 'Completed';
+                appendToOutput('Registration completed successfully!');
+                // Show the Start Exam button when registration is successful
+                startExamBtn.style.display = 'inline-block';
+            } else {
+                statusBadge.className = 'status-badge status-error';
+                statusBadge.textContent = 'Failed';
+                appendToOutput('Registration failed!', true);
+                // Hide the Start Exam button when registration fails
+                startExamBtn.style.display = 'none';
+            }
+        }
+        
+        function resetProcess() {
+            fetch('/reset', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                resetBtn.style.display = 'none';
+                startExamBtn.style.display = 'none';
+                statusBadge.className = 'status-badge status-idle';
+                statusBadge.textContent = 'Ready';
+                output.innerHTML = '';
+            })
+            .catch(error => {
+                console.error('Error resetting process:', error);
+            });
+        }
+        
+        function appendToOutput(message, isError = false) {
+            const line = document.createElement('div');
+            line.textContent = message;
+            
+            if (isError) {
+                line.className = 'error';
+            } else if (message.includes('completed successfully')) {
+                line.className = 'success';
+            }
+            
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Check if model exists and show message
+        {% if model_exists %}
+            appendToOutput('A face recognition model already exists. Running registration will update it.');
+        {% endif %}
+    </script>
+</body>
+</html>

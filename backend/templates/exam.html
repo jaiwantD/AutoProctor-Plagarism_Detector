@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeChallenge Platform</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --dark-bg: #1e293b;
+            --medium-bg: #334155;
+            --light-bg: #f8fafc;
+            --text-light: #f1f5f9;
+            --text-dark: #1e293b;
+            --border-color: #cbd5e1;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 45% 55%;
+            height: calc(100vh - 4rem);
+            overflow: hidden;
+        }
+
+        .problem-section {
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .difficulty {
+            font-size: 0.85rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-weight: 500;
+            background: #fbbf24;
+            color: #78350f;
+        }
+
+        .problem-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .example-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .example {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .example h4 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        pre {
+            background-color: var(--medium-bg);
+            color: var(--text-light);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            overflow-x: auto;
+            font-family: monospace;
+            margin-bottom: 0.75rem;
+        }
+
+        .constraints {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .constraints h3 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .constraints ul {
+            padding-left: 1.5rem;
+        }
+
+        .code-section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--medium-bg);
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .language-selector select {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--light-bg);
+        }
+
+        .editor-container {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #code-editor {
+            height: 100%;
+            border: none;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-light);
+            background-color: var(--dark-bg);
+            resize: none;
+            overflow-y: auto;
+        }
+
+        .testcases-section {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            background-color: var(--medium-bg);
+        }
+
+        .testcases-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .testcases-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+        }
+
+        .testcase-input {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+            font-family: monospace;
+            resize: none;
+            width: 100%;
+            border: 1px solid var(--border-color);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .results-section {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+
+        .result-success {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--success-color);
+        }
+
+        .result-error {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--error-color);
+        }
+
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+                grid-template-rows: 40% 60%;
+                height: auto;
+                overflow: visible;
+            }
+
+            .problem-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                overflow-y: auto;
+                max-height: 40vh;
+            }
+
+            .code-section {
+                height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">
+            <span class="logo-icon">&lt;/&gt;</span>
+            <span>CodeChallenge</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Problems</a></li>
+                <li><a href="#">Contests</a></li>
+                <li><a href="#">Learn</a></li>
+                <li><a href="#">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="problem-section">
+            <div class="problem-header">
+                <h2 class="problem-title">Two Sum</h2>
+                <span class="difficulty">Medium</span>
+            </div>
+
+            <div class="problem-description">
+                <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.</p>
+                <p>You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the same element twice.</p>
+                <p>You can return the answer in any order.</p>
+            </div>
+
+            <div class="example-section">
+                <div class="example">
+                    <h4>Example 1:</h4>
+                    <pre><strong>Input:</strong> nums = [2,7,11,15], target = 9
+<strong>Output:</strong> [0,1]
+<strong>Explanation:</strong> Because nums[0] + nums[1] == 9, we return [0, 1].</pre>
+                </div>
+
+                <div class="example">
+                    <h4>Example 2:</h4>
+                    <pre><strong>Input:</strong> nums = [3,2,4], target = 6
+<strong>Output:</strong> [1,2]</pre>
+                </div>
+
+                <div class="example">
+                    <h4>Example 3:</h4>
+                    <pre><strong>Input:</strong> nums = [3,3], target = 6
+<strong>Output:</strong> [0,1]</pre>
+                </div>
+            </div>
+
+            <div class="constraints">
+                <h3>Constraints:</h3>
+                <ul>
+                    <li><code>2 <= nums.length <= 10^4</code></li>
+                    <li><code>-10^9 <= nums[i] <= 10^9</code></li>
+                    <li><code>-10^9 <= target <= 10^9</code></li>
+                    <li><strong>Only one valid answer exists.</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="editor-header">
+                <div class="language-selector">
+                    <select id="language-select">
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="editor-container">
+                <textarea id="code-editor" spellcheck="false">/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+    // Write your solution here
+    
+}</textarea>
+            </div>
+
+            <div class="testcases-section">
+                <div class="testcases-header">
+                    <h3>Test Cases</h3>
+                    <div class="testcases-tabs">
+                        <div class="tab active" data-testcase="1">Case 1</div>
+                        <div class="tab" data-testcase="2">Case 2</div>
+                        <div class="tab" data-testcase="3">Case 3</div>
+                        <div class="tab" data-testcase="custom">Custom</div>
+                    </div>
+                </div>
+                <textarea class="testcase-input" id="testcase-input">[2,7,11,15]
+9</textarea>
+                <div class="button-group">
+                    <button class="btn btn-outline" id="run-code">Run Code</button>
+                    <button class="btn btn-primary" id="submit-code">Submit</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section">
+                <div class="results-header">
+                    <h3>Results</h3>
+                    <span id="execution-time"></span>
+                </div>
+                <div id="results-container">
+                    <!-- Results will be added here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Default code templates for different languages
+            const codeTemplates = {
+                javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+    // Write your solution here
+    
+}`,
+                python: `class Solution:
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        # Write your solution here
+        pass`,
+                java: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your solution here
+        
+    }
+}`,
+                cpp: `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Write your solution here
+        
+    }
+};`
+            };
+
+            // Test cases
+            const testCases =

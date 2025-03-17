@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamGuard - Secure Online Exam Monitoring</title>
+    <script> 
+        const navigateExam =(event)=>{
+            event.preventDefault();
+            window.location.href = "./index.html";
+        }   
+    </script>
+    <style>
+        :root {
+            --primary: #3a5fe5;
+            --primary-dark: #2a4bd8;
+            --secondary: #343a40;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            height: 32px;
+            width: 32px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        
+        .hero-content {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(58, 95, 229, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 28px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Auth Forms */
+        .auth-container {
+            display: none;
+            padding: 80px 0;
+            min-height: calc(100vh - 72px - 80px); /* viewport height - navbar - footer */
+        }
+        
+        .auth-container.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .auth-form {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+        }
+        
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .auth-form .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .auth-switch {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+        
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Webcam Setup Page */
+        .webcam-setup {
+            display: none;
+            padding: 40px 0;
+            text-align: center;
+            min-height: calc(100vh - 72px - 80px);
+        }
+        
+        .webcam-setup.active {
+            display: block;
+        }
+        
+        .webcam-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .webcam-container h2 {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .webcam-container p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        #webcam-view {
+            width: 100%;
+            max-width: 480px;
+            height: 360px;
+            background-color: #f0f0f0;
+            margin: 0 auto 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+        }
+        
+        #webcam-view.active video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #webcam-placeholder {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .webcam-controls {
+            margin-top: 20px;
+        }
+        
+        #face-status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: none;
+        }
+        
+        #face-status.success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            display: block;
+        }
+        
+        #face-status.error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            display: block;
+        }
+        
+        /* Exam Page */
+        .exam-page {
+            display: none;
+            padding: 20px 0;
+            min-height: calc(100vh - 72px - 80px);
+        }
+        
+        .exam-page.active {
+            display: block;
+        }
+        
+        .exam-header {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .exam-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .exam-timer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .exam-content {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .main-exam-area {
+            flex: 3;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+        
+        .question-container {
+            margin-bottom: 30px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .options-list {
+            list-style: none;
+        }
+        
+        .option-item {
+            margin-bottom: 12px;
+        }
+        
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-label:hover {
+            border-color: var(--primary);
+        }
+        
+        .option-input {
+            margin: 0;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .navigation-buttons .btn {
+            min-width: 120px;
+        }
+        
+        .monitoring-sidebar {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            max-width: 300px;
+        }
+        
+        .monitoring-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .webcam-monitor {
+            width: 100%;
+            height: 150px;
+            background-color: #f0f0f0;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .webcam-monitor video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .monitoring-status {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .rules-list {
+            list-style: none;
+        }
+        
+        .rules-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .rules-list li i {
+            color: var(--primary);
+        }
+        
+        .question-palette {
+            margin-top: 20px;
+        }
+        
+        .palette-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .palette-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .question-button {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .question-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .question-button.current {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .question-button.answered {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .question-button.marked {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 40px 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 0;
+            }
+            
+            .hero-image {
+                justify-content: center;
+                order: -1;
+            }
+            
+            .cta-buttons {
+                justify-content: center;
+            }
+            
+            .exam-content {
+                flex-direction: column;
+            }
+            
+            .monitoring-sidebar {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .section-title h2 {
+                font-size: 28px;
+            }
+            
+            .auth-form {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .auth-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .cta-buttons .btn {
+                width: 100%;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+            
+            .navigation-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">E</span>
+                ExamGuard
+            </a>
+            
+            <div class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#" id="nav-exam" onclick="navigateExam(event)" >Exam</a>
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-outline" id="login-button">Login</button>
+                <button class="btn btn-primary" id="signup-button">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Home Page -->
+    <div id="home-container" class="active">
+        <!-- Hero Section -->
+        <section class="hero container">
+            <div class="hero-content">
+                <h1>Secure Online Exams with AI Proctoring</h1>
+                <p>ExamGuard uses advanced AI technology to ensure exam integrity. Our platform provides real-time monitoring, identity verification, and a seamless experience for educational institutions.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" id="get-started-button">Get Started</button>
+                    <button class="btn btn-outline">Learn More</button>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <img src="/api/placeholder/500/400" alt="Online exam proctoring system">
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Advanced Proctoring Features</h2>
+                    <p>Our comprehensive exam monitoring system ensures academic integrity with cutting-edge technology</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>👁️</span>
+                        </div>
+                        <h3>AI-Powered Monitoring</h3>
+                        <p>Our advanced AI detects suspicious activities and behaviors during exams in real-time.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>🔒</span>
+                        </div>
+                        <h3>Secure Browser</h3>
+                        <p>Prevents access to unauthorized resources and applications during the examination.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>👤</span>
+                        </div>
+                        <h3>Identity Verification</h3>
+                        <p>Facial recognition ensures the registered student is the one taking the exam.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>📊</span>
+                        </div>
+                        <h3>Comprehensive Reports</h3>
+                        <p>Detailed reports on student behavior and flagged incidents for review.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>🔍</span>
+                        </div>
+                        <h3>Plagiarism Detection</h3>
+                        <p>Advanced algorithms detect content similarity and potential academic dishonesty.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <span>📱</span>
+                        </div>
+                        <h3>Device Detection</h3>
+                        <p>Identifies the presence of unauthorized devices during examination.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="exam-page" class="exam-page" style="display: none;">
+        <div class="container">
+            <h1>Exam Page</h1>
+            <p>Welcome to your exam. Your questions will appear here.</p>
+            <button id="start-exam">Start Exam</button>
+        </div>
+    </div>
+    
+    <!-- Login Page -->
+    <div id="login-container" class="auth-container">
+        <div class="auth-form">
+            <h2>Welcome Back</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            
+            <div class="auth-switch">
+                Don't have an account? <a href="#" id="switch-to-signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signup Page -->
+    <div id="signup-container" class="auth-container">
+        <div class="auth-form">
+            <h2>Create Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-email">Email Address</label>
+                    <input type="email" id="signup-email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" class="form-control" placeholder="Create a password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signup-confirm">Confirm Password</label>
+                    <input type="password" id="signup-confirm" class="form-control" placeholder="Confirm your password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            
+            <div class="auth-switch">
+                Already have an account? <a href="#" id="switch-to-login">Login</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Webcam Setup Page -->
+    <div id="webcam-setup" class="webcam-setup">
+        <div class="container">
+            <div class="webcam-container">
+                <h2>Webcam Setup & Identity Verification</h2>
+                <p>Please enable your webcam access for identity verification. We'll need to verify your face before you can proceed to the exam.</p>
+                
+                <div id="webcam-view">
+                    <span id="webcam-placeholder">Webcam feed will appear here</span>
+                </div>
+                
+                <div class="webcam-controls">
+                    <button id="start-webcam" class="btn btn-primary">Start Webcam</button>
+                </div>
+                
+                <div id="face-status"></div>
+                
+                <button id="proceed-to-exam" class="btn btn-primary" disabled>Proceed to Exam</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="exam-page" class="exam-page" style="display: none;">
+        <div class="container">
+            <h1>Exam Page</h1>
+    
+            <!-- Webcam Verification Section -->
+            <div id="webcam-verification">
+                <p>We need to verify your identity before starting the exam.</p>
+                <div id="webcam-view">
+                    <span id="webcam-placeholder">Webcam feed will appear here</span>
+                </div>
+                <button id="start-webcam" class="btn btn-primary">Enable Webcam</button>
+                <div id="face-status"></div>
+            </div>
+    
+            <!-- Exam Start Section -->
+            <div id="exam-content" style="display: none;">
+                <p>Question 1: What is 2 + 2?</p>
+                <ul>
+                    <li><input type="radio" name="q1"> 3</li>
+                    <li><input type="radio" name="q1"> 4</li>
+                    <li><input type="radio" name="q1"> 5</li>
+                </ul>
+            </div>
+    
+            <button id="start-exam" class="btn btn-primary" style="display: none;">Start Exam</button>
+        </div>
+    </div>
+</body>
+</html>
+
